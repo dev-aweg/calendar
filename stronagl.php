@@ -75,39 +75,22 @@ $matrix = array_chunk($calendar, 7);
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <style type="text/css">
+        .switch.activated {
+            background-color: #5C5C5C;
+        }
         .switch {
             position: relative;
             display: inline-block;
             width: 100%;
             height: 85%;
-        }
-
-        .switch input {
-            display: none;
-        }
-
-        .slider {
-            position: absolute;
             cursor: pointer;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background-color: #c7ced4;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-        input:checked + .slider {
-            background-color: #97c79d;
-        }
-
-        .slider.round {
+            border: inherit;
             border-radius: 34px;
-        }
-
-        .slider.round:before {
-            border-radius: 50%;
         }
 
         .guttersmall [class*="col-"] {
@@ -269,14 +252,6 @@ $matrix = array_chunk($calendar, 7);
         });
     })
 
-</script>
-<script>
-    var komorka = document.getElementById("");
-    element.addEventListener("click", myFunction);
-
-    function myFunction() {
-        alert ("Hello World!");
-    }
 </script>
 </body>
 </html>

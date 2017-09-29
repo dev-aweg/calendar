@@ -47,18 +47,14 @@ if ($rezultat = $polaczenie->query(
                 </div>
                 <?php foreach ($cells as $event): ?>
                     <div class="col-sm-5">
-
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider round text-center">
+                            <button class="switch" <?php echo $event['disabled'] ?> style = "color: black">
                                 <?php
                                 if (!empty($event['nazwa'])) {
                                     list($name, $surname) = explode(" ", $event['nazwa'], 2);
                                     echo $name[0] . ". " . $surname;
                                 }
                                 ?>
-                            </span>
-                        </label>
+                            </button>
                     </div>
                 <?php endforeach ?>
 
@@ -66,3 +62,10 @@ if ($rezultat = $polaczenie->query(
         <?php endforeach ?>
     </div>
 </div>
+<script>
+
+        $('.switch').click(function (event) {
+            this.classList.add('activated');
+            $(this).unbind(event);
+        });
+</script>
