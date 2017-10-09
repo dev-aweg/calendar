@@ -43,8 +43,6 @@ if (checkEmail($email) === false) {
     header('Location:createaccount.php');
     exit();
 }
-$_SESSION['zalogowany'] = true;
 $add = $polaczenie->query("INSERT INTO uzytkownicy SET nazwa='$new_name', email='$email', haslo='$hashed_password'");
-$_SESSION['nazwa'] = $new_name;
-header('Location: stronagl.php');
-$_SESSION['pass_for_hash'] = $password;
+$_SESSION['after_reg'] = "Dziękujemy za rejestrację, zaloguj się";
+header('Location: index.php');

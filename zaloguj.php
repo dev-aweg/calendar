@@ -29,9 +29,8 @@ if ($polaczenie->connect_errno != 0) {
                 $_SESSION['zalogowany'] = true;
 
 
-                $_SESSION['user'] = $wiersz['user'];
                 $_SESSION['nazwa'] = $wiersz['nazwa'];
-
+                $_SESSION['id'] = $wiersz['id'];
 
                 unset($_SESSION['blad']);
                 $rezultat->free_result();

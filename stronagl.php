@@ -11,7 +11,7 @@ if (!isset($_SESSION['zalogowany'])) {
 require_once "connect.php";
 
 $polaczenie = @new mysqli($host, $db_user, $db_password, $db_name);
-
+$polaczenie->set_charset("utf8");
 if ($polaczenie->connect_errno != 0) {
     echo "Error: " . $polaczenie->connect_errno;
 }
@@ -28,7 +28,7 @@ $calendar = range(1, $how_many_days_current);
 $calendar = array_map(function ($day) {
     return [
         'day' => $day,
-        'date'=> date(sprintf('Y-m-%0.d', $day)),
+        'date' => date(sprintf('Y-m-%02d', $day)),
         'status_color' => '#445261',
     ];
 }, $calendar);
@@ -55,6 +55,21 @@ for ($i = 1; $i <= $iledodac; $i++) {
 }
 
 $matrix = array_chunk($calendar, 7);
+$current_id = $_SESSION['id'];
+try {
+    $pdo = new PDO('mysql:host=localhost;dbname=wozek;charset=utf8', 'root', 'root');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $stmt = $pdo->query("SELECT `date`, `hour`, `confirmed` FROM events WHERE user_id=$current_id");
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        print_r($row);
+    
+    }
+    die();
+    $stmt->closeCursor();
+} catch (PDOException $e) {
+    echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
+}
 
 ?>
 
@@ -75,9 +90,51 @@ $matrix = array_chunk($calendar, 7);
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <style type="text/css">
-        .switch.activated {
-            background-color: #5C5C5C;
+        .myeventtable {
+            position: relative;
+            display: inline-block;
+            width: 90%;
+            height: 85%;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #acb8c5;
+            border: inherit;
+            border-radius: 20px;
         }
+
+        .waiting {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: 85%;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e0d195;
+            border: inherit;
+            border-radius: 34px;
+        }
+
+        .activated {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: 85%;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #a9d0ab;
+            border: inherit;
+            border-radius: 34px;
+        }
+
         .switch {
             position: relative;
             display: inline-block;
@@ -180,7 +237,9 @@ $matrix = array_chunk($calendar, 7);
     <nav style="background-color: #343a40" class="navbar navbar-light navcollapse">
         <div class="row navcollapse">
             <div class="col-sm-6 text-left" style="color:#dedee2">
-                <h3><i class="fa fa-user-circle" aria-hidden="true">&nbsp</i><?php echo $_SESSION['nazwa'] ?></h3>
+                <h3 data-toggle="modal" data-target="#nav" style="cursor: pointer"><i class="fa fa-user-circle"
+                                                                                      aria-hidden="true">&nbsp</i><?php echo $_SESSION['nazwa'] ?>
+                </h3>
             </div>
             <div class="col-sm-6 text-right">
                 <form action="logout.php">
@@ -222,17 +281,48 @@ $matrix = array_chunk($calendar, 7);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <h5 id="header" class="modal-title"></h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div id="modal" class="modal-body">
 
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn float-right">Wyślij prośbę</button>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="nav" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="header" class="modal-title">Twój terminarz</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
             </div>
+            <div id="modal" class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row guttersmall">
+                            <div class="col-sm-6">Data</div>
+                            <div class="col-sm-3">Godzina</div>
+                            <div class="col-sm-3">Status</div>
+                        </div>
+                        <?php foreach ($myevents as $row): ?>
+                            <?php print_r($myevents) ?>
+                            <div class="row guttersmall">
+                                <div class="col-sm-6 activated"></div>
+                                <div class="col-sm-3 activated"></div>
+                                <div class="col-sm-3"></div>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>
@@ -240,11 +330,12 @@ $matrix = array_chunk($calendar, 7);
 
     $('.cellBtn').click(function () {
         var date = $(this).data('date');
+        document.getElementById("header").innerHTML = date;
         $.ajax({
             type: "GET",
             url: '/komorka.php',
             data: {
-                date:date
+                date: date
             },
             success: function (response) {
                 $('#exampleModal .modal-body').html(response);
