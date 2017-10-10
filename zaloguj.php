@@ -35,18 +35,9 @@ if ($polaczenie->connect_errno != 0) {
                 unset($_SESSION['blad']);
                 $rezultat->free_result();
 
-                /*	$zapytanie = $polaczenie->query("SELECT * FROM uzytkownicy WHERE godzina='16'");
-            $wiersz = $zapytanie->fetch_assoc();
-            $_SESSION['pierwsza'] = $wiersz['pierwsza'];
-            $_SESSION['druga'] = $wiersz['druga'];
-            $_SESSION['trzecia'] = $wiersz['trzecia'];
-            $_SESSION['czwarta'] = $wiersz['czwarta'];
-            $_SESSION['data'] = $wiersz['data'];
-                    $zapytanie->free_result();
-            */
-
-
-                header('Location: stronagl.php');
+                if ($wiersz['id'] == 20) {
+                    header('Location: admin_panel.php');
+                }else header('Location: stronagl.php');
             }
 
         } else {
@@ -56,5 +47,5 @@ if ($polaczenie->connect_errno != 0) {
 
         }
     }
-        $polaczenie->close();
+    $polaczenie->close();
 }

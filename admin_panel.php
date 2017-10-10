@@ -312,7 +312,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
     </table>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" style="max-width: 600px" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 id="header" class="modal-title"></h5>
@@ -371,7 +371,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
         document.getElementById("header").innerHTML = date;
         $.ajax({
             type: "GET",
-            url: '/komorka.php',
+            url: '/komorka_admin.php',
             data: {
                 date: date
             },
