@@ -267,7 +267,6 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
 <body>
 
 <div style="margin: 0 2% 1% 2%">
-    <!-- Just an image -->
     <nav style="background-color: #343a40" class="navbar navbar-light navcollapse">
         <div class="row navcollapse">
             <div class="col-sm-6 text-left" style="color:#dedee2">

@@ -179,6 +179,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
             left: 0;
             right: 0;
             bottom: 0;
+            color: #000000;
             background-color: #c7ced4;
             border: inherit;
             border-radius: 34px;
