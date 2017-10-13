@@ -30,19 +30,12 @@ foreach (range(12, 16) as $hour) {
 }
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=wozek;charset=utf8', 'root', 'root');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION, PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->query('SELECT `nazwa`, `id` FROM `uzytkownicy`');
+    $stmt = $pdo->query('SELECT `nazwa`, `id`, `email` FROM `uzytkownicy`');
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $all_users_list[] = $row;
     }
-    foreach ($all_users_list as $key){
-        foreach ($key as $propety){
-            echo $propety."\n";
-        }
-    }
- //    print_r($all_users_list);
-     die();
     $stmt->closeCursor();
 } catch (PDOException $e) {
     echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
@@ -69,19 +62,23 @@ if ($rezultat = $polaczenie->query(
             $event['remove_icon'] = "<i class=\"fa fa-minus-square\"></i>";
         }
         $matrix[$event['hour']][$event['column']] = $event;
-
     }
+    //print_r($matrix); die();
 }
 
 
 ?>
 <html>
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.7.1/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
     <style>
+        .scrollable-menu {
+            height: auto;
+            max-height: 200px;
+            width: 190px;
+            overflow-x: hidden;
+        }
+
         .button-icon {
             color: #313e39;
             cursor: pointer;
@@ -103,20 +100,22 @@ if ($rezultat = $polaczenie->query(
                 <?php foreach ($cells as $event): ?>
                     <div class="col-sm-4">
                         <div class="dropdown">
-                            <button class="<?php echo $event['button_class'] ?? "switch dropdown-toggle" ?>
+                            <button class="<?php echo $event['button_class'] ?? "dropdown-toggle switch" ?>
                             <?php echo $event['button_status'] ?? 'data-toggle="dropdown"' ?>"
                                     data-toggle="dropdown"
                                     data-hour="<?php echo $event['hour'] ?>"
                                     data-column="<?php echo $event['column'] ?>"
-                                    data-date="<?php echo $date ?>"
-                                    onclick="setColor(this)">
+                                    data-date="<?php echo $date ?>">
                                 <?php echo $event['shortname']; ?>
                             </button>
-                            <ul class="dropdown-menu">
-                                <?php foreach ($all_users_list as $row => $num_of_row): ?>
-                                    <li><a href="#"><?php $num_of_row['nazwa'] ?></a></li>
+                            <div class="dropdown-menu scrollable-menu" role="menu" >
+                                <?php foreach ($all_users_list as $key): ?>
+                                    <a class="dropdown-item" href="#" data-toggle="<?php echo $key['nazwa'] ?>"
+                                       onclick="addFromList(this)"><?php echo $key['nazwa'] ?></a>
                                 <?php endforeach ?>
-                            </ul>
+                            </div>
+                            <button class="switch" style="display: none">coto
+                            </button>
                         </div>
                     </div>
                     <div class="col-sm-1" style="margin-left: -10px">
@@ -143,6 +142,18 @@ if ($rezultat = $polaczenie->query(
 </div>
 
 <script>
+    function addFromList() {
+        $( '.switch' ).toggle();
+      //  var
+     //   var add_new = [];
+     //        add_new.push({
+     //            date: $('.').data("date"),
+      //           hour: $element.data("hour"),
+     //            column: $element.data("column")
+    //         });$(this).data()
+
+    }
+
     $('.remove-button').click(function () {
 
         var data = $(this).data();
