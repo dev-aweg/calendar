@@ -104,7 +104,9 @@ if ($rezultat = $polaczenie->query(
                                 <?php if ($event['button_status'] == 'disabled') {
                                     echo $event['shortname'];
                                 } else {
-                                    echo "<select class='dropdown' >";
+                                    $hour=$event['hour'];
+                                    $column=$event['column'];
+                                    echo '<select class="dropdown" data-hour="'.$hour.'" data-column="'.$column.'" data-date="'.$date.'">';
                                     foreach ($all_users_list as $key){
                                        $listname = $key['name'];
                                        $id_listname = $key['id'];
@@ -118,7 +120,7 @@ if ($rezultat = $polaczenie->query(
                     </div>
                     <div class="col-sm-1" style="margin-left: -10px">
                         <button type="submit" class="btn btn-link btn-sm  float-left remove-button button-icon"
-                                data-id="<?php echo $event['event_id'] ?>">
+                                data-id="<?php echo $event['event_id'] ?? ""?>">
                             <?php echo $event['remove_icon'] ?? "" ?>
                         </button>
                         <button type="submit" class="btn btn-link btn-sm  float-left add-button button-icon"
@@ -143,7 +145,9 @@ if ($rezultat = $polaczenie->query(
         var ms = [];
         $('.dropdown').each(function (index, element) {
             var $element = $(element);
+
             ms.push({
+                id: $element.val(),
                 date: $element.data("date"),
                 hour: $element.data("hour"),
                 column: $element.data("column")
@@ -152,12 +156,21 @@ if ($rezultat = $polaczenie->query(
         console.log(ms);
         $.ajax({
             type: "POST",
-            url: '/askfor.php',
+            url: '/addChosen.php',
             data: {
-                events: ms
+                chosen: ms
             },
             success: function () {
-                document.getElementById("modal").innerHTML = "Wysłałeś prośbę, dziękujemy!";
+                $.ajax({
+                    type: "GET",
+                    url: '/komorka_admin.php',
+                    data: {
+                        date: "<?php echo $date ?>"
+                    },
+                    success: function (response) {
+                        $('#exampleModal .modal-body').html(response);
+                    }
+                });
             }
         });
     })
