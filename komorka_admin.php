@@ -30,13 +30,17 @@ foreach (range(12, 16) as $hour) {
 }
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=wozek;charset=utf8', 'root', 'root');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION, PDO::FETCH_ASSOC);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->query('SELECT `nazwa`, `id`, `email` FROM `uzytkownicy`');
+    $stmt = $pdo->query('SELECT `name`, `id` FROM `uzytkownicy`');
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $all_users_list[] = $row;
     }
     $stmt->closeCursor();
+    //$wybierz["name"]="Wybierz z listy";
+  //  print_r($wybierz); die();
+    array_unshift($all_users_list, array("name" => "Wybierz z listy", "id" => 0));
+   // print_r($all_users_list); die();
 } catch (PDOException $e) {
     echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
 }
@@ -46,15 +50,15 @@ if ($rezultat = $polaczenie->query(
         mysqli_real_escape_string($polaczenie, $date)))) {
     $events = $rezultat->fetch_all(MYSQLI_ASSOC);
     foreach ($events as $event) {
-        if ($event['confirmed'] == 1 && ($event['nazwa'])) {
-            list($name, $surname) = explode(" ", $event['nazwa'], 2);
+        if ($event['confirmed'] == 1 && ($event['name'])) {
+            list($name, $surname) = explode(" ", $event['name'], 2);
             $event['shortname'] = $name[0] . ". " . $surname;
             $event['button_class'] = "switch";
             $event['button_status'] = "disabled";
             $event['remove_icon'] = "<i class=\"fa fa-minus-square\"></i>";
         }
-        if ($event['confirmed'] == 0 && ($event['nazwa'])) {
-            list($name, $surname) = explode(" ", $event['nazwa'], 2);
+        if ($event['confirmed'] == 0 && ($event['name'])) {
+            list($name, $surname) = explode(" ", $event['name'], 2);
             $event['shortname'] = $name[0] . ". " . $surname;
             $event['button_class'] = "waiting";
             $event['button_status'] = "disabled";
@@ -72,13 +76,6 @@ if ($rezultat = $polaczenie->query(
 <head>
 
     <style>
-        .scrollable-menu {
-            height: auto;
-            max-height: 200px;
-            width: 190px;
-            overflow-x: hidden;
-        }
-
         .button-icon {
             color: #313e39;
             cursor: pointer;
@@ -99,33 +96,34 @@ if ($rezultat = $polaczenie->query(
                 </div>
                 <?php foreach ($cells as $event): ?>
                     <div class="col-sm-4">
-                        <div class="dropdown">
-                            <button class="<?php echo $event['button_class'] ?? "dropdown-toggle switch" ?>
-                            <?php echo $event['button_status'] ?? 'data-toggle="dropdown"' ?>"
-                                    data-toggle="dropdown"
+                        <div>
+                            <button class="<?php echo $event['button_class'] ?? "switch" ?>"
                                     data-hour="<?php echo $event['hour'] ?>"
                                     data-column="<?php echo $event['column'] ?>"
                                     data-date="<?php echo $date ?>">
-                                <?php echo $event['shortname']; ?>
+                                <?php if ($event['button_status'] == 'disabled') {
+                                    echo $event['shortname'];
+                                } else {
+                                    echo "<select class='dropdown' >";
+                                    foreach ($all_users_list as $key){
+                                       $listname = $key['name'];
+                                       $id_listname = $key['id'];
+                                        echo "<option value='"."$id_listname"."'>"."$listname"."</option>";
+                                    }
+                                    echo "</select>";
+                                } ?>
                             </button>
-                            <div class="dropdown-menu scrollable-menu" role="menu" >
-                                <?php foreach ($all_users_list as $key): ?>
-                                    <a class="dropdown-item" href="#" data-toggle="<?php echo $key['nazwa'] ?>"
-                                       onclick="addFromList(this)"><?php echo $key['nazwa'] ?></a>
-                                <?php endforeach ?>
-                            </div>
-                            <button class="switch" style="display: none">coto
-                            </button>
+
                         </div>
                     </div>
                     <div class="col-sm-1" style="margin-left: -10px">
                         <button type="submit" class="btn btn-link btn-sm  float-left remove-button button-icon"
                                 data-id="<?php echo $event['event_id'] ?>">
-                            <?php echo $event['remove_icon'] ?>
+                            <?php echo $event['remove_icon'] ?? "" ?>
                         </button>
                         <button type="submit" class="btn btn-link btn-sm  float-left add-button button-icon"
                                 data-id="<?php echo $event['event_id'] ?>">
-                            <?php echo $event['add_icon'] ?>
+                            <?php echo $event['add_icon'] ?? "" ?>
                         </button>
                     </div>
                 <?php endforeach ?>
@@ -140,20 +138,29 @@ if ($rezultat = $polaczenie->query(
 <div id="checker">
 
 </div>
-
 <script>
-    function addFromList() {
-        $( '.switch' ).toggle();
-      //  var
-     //   var add_new = [];
-     //        add_new.push({
-     //            date: $('.').data("date"),
-      //           hour: $element.data("hour"),
-     //            column: $element.data("column")
-    //         });$(this).data()
-
-    }
-
+    $('#send').click(function () {
+        var ms = [];
+        $('.dropdown').each(function (index, element) {
+            var $element = $(element);
+            ms.push({
+                date: $element.data("date"),
+                hour: $element.data("hour"),
+                column: $element.data("column")
+            });
+        });
+        console.log(ms);
+        $.ajax({
+            type: "POST",
+            url: '/askfor.php',
+            data: {
+                events: ms
+            },
+            success: function () {
+                document.getElementById("modal").innerHTML = "Wysłałeś prośbę, dziękujemy!";
+            }
+        });
+    })
     $('.remove-button').click(function () {
 
         var data = $(this).data();

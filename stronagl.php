@@ -271,7 +271,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
         <div class="row navcollapse">
             <div class="col-sm-6 text-left" style="color:#dedee2">
                 <h3 data-toggle="modal" data-target="#nav" style="cursor: pointer"><i class="fa fa-user-circle"
-                                                                                      aria-hidden="true">&nbsp</i><?php echo $_SESSION['nazwa'] ?>
+                                                                                      aria-hidden="true">&nbsp</i><?php echo $_SESSION['name'] ?>
                 </h3>
             </div>
             <div class="col-sm-6 text-right">

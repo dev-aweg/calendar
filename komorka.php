@@ -35,14 +35,14 @@ if ($rezultat = $polaczenie->query(
         mysqli_real_escape_string($polaczenie, $date)))) {
     $events = $rezultat->fetch_all(MYSQLI_ASSOC);
     foreach ($events as $event) {
-        if ($event['confirmed'] == 1 && ($event['nazwa'])) {
-            list($name, $surname) = explode(" ", $event['nazwa'], 2);
-            $event['nazwa'] = $name[0] . ". " . $surname;
+        if ($event['confirmed'] == 1 && ($event['name'])) {
+            list($name, $surname) = explode(" ", $event['name'], 2);
+            $event['name'] = $name[0] . ". " . $surname;
             $event['button_class'] = "switch";
             $event['button_status'] = "disabled";
         }
-        if ($event['confirmed'] == 0 && ($event['nazwa'])) {
-            $event['nazwa'] = 'Oczekujący';
+        if ($event['confirmed'] == 0 && ($event['name'])) {
+            $event['name'] = 'Oczekujący';
             $event['button_class'] = "waiting";
             $event['button_status'] = "disabled";
         }
@@ -76,7 +76,7 @@ if ($rezultat = $polaczenie->query(
                                 data-date="<?php echo $date ?>"
                                 <?php echo $event['button_status'] ?>
                                 onclick="setColor(this)">
-                            <?php echo $event['nazwa']; ?>
+                            <?php echo $event['name']; ?>
                         </button>
                     </div>
                 <?php endforeach ?>

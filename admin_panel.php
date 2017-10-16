@@ -181,10 +181,24 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
             bottom: 0;
             color: #000000;
             background-color: #c7ced4;
-            border: inherit;
+            border: 1px solid #ffffff;
             border-radius: 34px;
         }
-
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: 85%;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            color: #000000;
+            background-color: #c7ced4;
+            border: 0px solid #ffffff;
+            border-radius: 34px;
+        }
         .guttersmall [class*="col-"] {
             padding-left: 2.5px;
             padding-right: 2.5px;
@@ -273,7 +287,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
         <div class="row navcollapse">
             <div class="col-sm-6 text-left" style="color:#dedee2">
                 <h3 data-toggle="modal" data-target="#nav" style="cursor: pointer"><i class="fa fa-user-circle"
-                                                                                      aria-hidden="true">&nbsp</i><?php echo $_SESSION['nazwa'] ?>
+                                                                                      aria-hidden="true">&nbsp</i><?php echo $_SESSION['name'] ?>
                 </h3>
             </div>
             <div class="col-sm-6 text-right">

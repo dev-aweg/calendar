@@ -29,7 +29,7 @@ if ($polaczenie->connect_errno != 0) {
                 $_SESSION['zalogowany'] = true;
 
 
-                $_SESSION['nazwa'] = $wiersz['nazwa'];
+                $_SESSION['name'] = $wiersz['name'];
                 $_SESSION['id'] = $wiersz['id'];
 
                 unset($_SESSION['blad']);
