@@ -60,17 +60,21 @@ try {
     $pdo = new PDO('mysql:host=localhost;dbname=wozek;charset=utf8', 'root', 'root');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->query("SELECT `date`, `hour`, `confirmed` FROM events WHERE user_id=$current_id");
+    $stmt = $pdo->query("SELECT *, e.id AS event_id FROM events AS e LEFT JOIN uzytkownicy AS u ON e.user_id = u.id WHERE `confirmed`=0");
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $my_events[] = $row;
+        list($name, $surname) = explode(" ", $row['name'], 2);
+        $row['shortname'] = $name[0] . ". " . $surname;
+        $pending_events[] = $row;
     }
-    sort($my_events);
-    // print_r($my_events);
-    //  die();
+
+    sort($pending_events);
+    //print_r($pending_events);
+    // die();
     $stmt->closeCursor();
 } catch (PDOException $e) {
     echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
 }
+$add_icon = "<i class=\"fa fa-plus-square\"></i>";
 $checked_icon = "<i class=\"fa fa-check-square\"></i>";
 $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
 ?>
@@ -184,6 +188,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
             border: 1px solid #ffffff;
             border-radius: 34px;
         }
+
         .dropdown {
             position: relative;
             display: inline-block;
@@ -199,6 +204,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
             border: 0px solid #ffffff;
             border-radius: 34px;
         }
+
         .guttersmall [class*="col-"] {
             padding-left: 2.5px;
             padding-right: 2.5px;
@@ -346,29 +352,32 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
     <div class="modal-dialog" style="max-width: 400px" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="header" class="modal-title">Twój terminarz</h5>
+                <h5 id="header" class="modal-title">Lista wszystkich oczekujacych</h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="pending-list">
                 <div class="row">
                     <div class="col-sm-12" style="text-align: center">
                         <div class="row guttersmall">
-                            <div class="col-sm-5 myeventheader">Data</div>
+                            <div class="col-sm-5 myeventheader">Oczekujacy</div>
+                            <div class="col-sm-3 myeventheader">Data</div>
                             <div class="col-sm-3 myeventheader">Godzina</div>
-                            <div class="col-sm-3 myeventheader">Status</div>
                             <div class="col-sm-1"></div>
                         </div>
-                        <?php foreach ($my_events as $row => $son): ?>
+                        <?php foreach ($pending_events as $row => $this_event): ?>
                             <div class="row guttersmall">
-                                <div class="col-sm-5 myeventtable"><?php echo $son['date'] ?></div>
-                                <div class="col-sm-3 myeventtable"><?php echo $son['hour'] ?></div>
-                                <div class="col-sm-3 myeventstatus">
-                                    <?php if ($son['confirmed'] == 1) echo $checked_icon;
-                                    else echo $wait_icon ?>
+                                <div class="col-sm-5 myeventtable"><?php echo $this_event['name'] ?></div>
+                                <div class="col-sm-3 myeventtable"><?php echo $this_event['date'] ?></div>
+                                <div class="col-sm-3 myeventstatus"><?php echo $this_event['hour'] ?></div>
+                                <div class="col-sm-1">
+                                    <button type="submit"
+                                            class="btn btn-link btn-sm  float-left add-pending button-icon"
+                                            data-id="<?php echo $this_event['event_id'] ?>">
+                                        <?php echo $add_icon ?>
+                                    </button>
                                 </div>
-                                <div class="col-sm-1"></div>
                             </div>
                         <?php endforeach ?>
                     </div>
@@ -380,7 +389,24 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
     </div>
 </div>
 <script>
-
+    $('.add-pending').click(function () {
+        var $ele = $(this).parent().parent();
+        var data = $(this).data();
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: '/addRequest.php',
+            data: data,
+            success: function () {
+                $.ajax({
+                    url: '/admin_panel.php',
+                    success: function () {
+                        $ele.fadeOut().remove();
+                    }
+                });
+            }
+        })
+    });
     $('.cellBtn').click(function () {
         var date = $(this).data('date');
         document.getElementById("header").innerHTML = date;

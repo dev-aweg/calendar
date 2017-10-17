@@ -37,8 +37,6 @@ try {
         $all_users_list[] = $row;
     }
     $stmt->closeCursor();
-    //$wybierz["name"]="Wybierz z listy";
-  //  print_r($wybierz); die();
     array_unshift($all_users_list, array("name" => "Wybierz z listy", "id" => 0));
    // print_r($all_users_list); die();
 } catch (PDOException $e) {
