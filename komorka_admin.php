@@ -38,7 +38,7 @@ try {
     }
     $stmt->closeCursor();
     array_unshift($all_users_list, array("name" => "Wybierz z listy", "id" => 0));
-   // print_r($all_users_list); die();
+    // print_r($all_users_list); die();
 } catch (PDOException $e) {
     echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
 }
@@ -72,15 +72,6 @@ if ($rezultat = $polaczenie->query(
 ?>
 <html>
 <head>
-
-    <style>
-        .button-icon {
-            color: #313e39;
-            cursor: pointer;
-            width: 16px;
-            height: 14px;
-        }
-    </style>
 </head>
 <body>
 <div class="row">
@@ -102,13 +93,13 @@ if ($rezultat = $polaczenie->query(
                                 <?php if ($event['button_status'] == 'disabled') {
                                     echo $event['shortname'];
                                 } else {
-                                    $hour=$event['hour'];
-                                    $column=$event['column'];
-                                    echo '<select class="dropdown" data-hour="'.$hour.'" data-column="'.$column.'" data-date="'.$date.'">';
-                                    foreach ($all_users_list as $key){
-                                       $listname = $key['name'];
-                                       $id_listname = $key['id'];
-                                        echo "<option value='"."$id_listname"."'>"."$listname"."</option>";
+                                    $hour = $event['hour'];
+                                    $column = $event['column'];
+                                    echo '<select class="dropdown" data-hour="' . $hour . '" data-column="' . $column . '" data-date="' . $date . '">';
+                                    foreach ($all_users_list as $key) {
+                                        $listname = $key['name'];
+                                        $id_listname = $key['id'];
+                                        echo "<option style ='text-align:center' value='" . "$id_listname" . "'>" . "$listname" . "</option>";
                                     }
                                     echo "</select>";
                                 } ?>
@@ -118,7 +109,7 @@ if ($rezultat = $polaczenie->query(
                     </div>
                     <div class="col-sm-1" style="margin-left: -10px">
                         <button type="submit" class="btn btn-link btn-sm  float-left remove-button button-icon"
-                                data-id="<?php echo $event['event_id'] ?? ""?>">
+                                data-id="<?php echo $event['event_id'] ?? "" ?>">
                             <?php echo $event['remove_icon'] ?? "" ?>
                         </button>
                         <button type="submit" class="btn btn-link btn-sm  float-left add-button button-icon"
@@ -132,11 +123,14 @@ if ($rezultat = $polaczenie->query(
         <?php endforeach ?>
     </div>
 </div>
-<div id="footer" class="modal-footer">
-    <button id="send" type="button" class="btn float-right">ZAPISZ</button>
-</div>
-<div id="checker">
-
+<div class="row">
+    <div class="col-sm-11">
+        <div id="footer" class="modal-footer">
+            <button id="send" type="button" class="btn float-right"
+                    style="background-color: #e3e5e8;  border-radius: 34px;">ZAPISZ
+            </button>
+        </div>
+    </div>
 </div>
 <script>
     $('#send').click(function () {

@@ -74,6 +74,7 @@ try {
 } catch (PDOException $e) {
     echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
 }
+$remove_icon = "<i class=\"fa fa-minus-square\"></i>";
 $add_icon = "<i class=\"fa fa-plus-square\"></i>";
 $checked_icon = "<i class=\"fa fa-check-square\"></i>";
 $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
@@ -96,6 +97,12 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <style type="text/css">
+        .button-icon {
+            color: #313e39;
+            cursor: pointer;
+            width: 16px;
+            height: 14px;
+        }
         .myeventstatus {
             position: relative;
             display: inline-block;
@@ -184,7 +191,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
             right: 0;
             bottom: 0;
             color: #000000;
-            background-color: #c7ced4;
+            background-color: #e3e5e8;
             border: 1px solid #ffffff;
             border-radius: 34px;
         }
@@ -200,7 +207,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
             right: 0;
             bottom: 0;
             color: #000000;
-            background-color: #c7ced4;
+            background-color: #e3e5e8;
             border: 0px solid #ffffff;
             border-radius: 34px;
         }
@@ -349,33 +356,43 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
     </div>
 </div>
 <div class="modal fade" id="nav" tabindex="-1" role="dialog">
-    <div class="modal-dialog" style="max-width: 400px" role="document">
+    <div class="modal-dialog" style="max-width: 450px" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="header" class="modal-title">Lista wszystkich oczekujacych</h5>
+                <h5 id="header" class="modal-title centered" style="text-align: center"><?php if (empty($pending_events)){
+                    echo "Brak oczekujących eventów";
+
+                    }else{
+                    echo "Lista wszystkich oczekujacych";
+                    } ?></h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="pending-list">
+            <div class="modal-body" id="pending-list" style="visibility: <?php if (empty($pending_events)) echo "hidden" ?? ""?>">
                 <div class="row">
-                    <div class="col-sm-12" style="text-align: center">
+                    <div class="col-sm-12" style="text-align: center" id="list-header-container">
                         <div class="row guttersmall">
-                            <div class="col-sm-5 myeventheader">Oczekujacy</div>
+                            <div class="col-sm-4 myeventheader">Oczekujacy</div>
                             <div class="col-sm-3 myeventheader">Data</div>
                             <div class="col-sm-3 myeventheader">Godzina</div>
-                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2"></div>
                         </div>
                         <?php foreach ($pending_events as $row => $this_event): ?>
-                            <div class="row guttersmall">
-                                <div class="col-sm-5 myeventtable"><?php echo $this_event['name'] ?></div>
+                            <div class="row guttersmall" id="list-container" style="text-align: center">
+                                <div class="col-sm-4 myeventtable"><?php echo $this_event['shortname'] ?></div>
                                 <div class="col-sm-3 myeventtable"><?php echo $this_event['date'] ?></div>
                                 <div class="col-sm-3 myeventstatus"><?php echo $this_event['hour'] ?></div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-2">
                                     <button type="submit"
                                             class="btn btn-link btn-sm  float-left add-pending button-icon"
                                             data-id="<?php echo $this_event['event_id'] ?>">
                                         <?php echo $add_icon ?>
+                                    </button>
+                                    <button type="submit"
+                                            class="btn btn-link btn-sm  float-left remove-pending button-icon"
+                                            data-id="<?php echo $this_event['event_id'] ?>">
+                                        <?php echo $remove_icon ?>
                                     </button>
                                 </div>
                             </div>
@@ -389,6 +406,28 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
     </div>
 </div>
 <script>
+    $('.remove-pending').click(function () {
+        var $ele = $(this).parent().parent();
+        var data = $(this).data();
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: '/remRequest.php',
+            data: data,
+            success: function () {
+                $.ajax({
+                    url: '/admin_panel.php',
+                    success: function () {
+                        $ele.fadeOut().remove();
+                        var cont = document.getElementById('list-container');
+                        if (cont == null)  document.getElementById('list-header-container').innerHTML = "Brak oczekujących eventów!";{
+
+                        }
+                    }
+                });
+            }
+        })
+    });
     $('.add-pending').click(function () {
         var $ele = $(this).parent().parent();
         var data = $(this).data();
