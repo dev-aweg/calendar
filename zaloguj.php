@@ -20,26 +20,25 @@ try {
 } catch (PDOException $e) {
     echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
 }
-if ($count_users > 0) {
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (password_verify($haslo, $row['haslo'])) {
-        $_SESSION['zalogowany'] = true;
+if ($count_users != 1) {
+    $_SESSION['errors'] = '<span style="color:red">Nieprawidłowy login lub hasło!</span>';
+    $stmt->closeCursor();
+    header('Location: index.php');
+}
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+if (password_verify($haslo, $row['haslo'])) {
+    $_SESSION['zalogowany'] = true;
+    $_SESSION['name'] = $row['name'];
+    $_SESSION['id'] = $row['id'];
+    unset($_SESSION['errors']);
 
-
-        $_SESSION['name'] = $row['name'];
-        $_SESSION['id'] = $row['id'];
-
-        unset($_SESSION['blad']);
-        //$stmt->free_result();
-
-        if ($row['id'] === 20) {
-            header('Location: admin_panel.php');
-        } else {
-            header('Location: land_page.php');
-        }
+    if ($row['id'] == '20') {
+        header('Location: admin_panel.php');
+    } else {
+        header('Location: land_page.php');
     }
 } else {
-
-    $_SESSION['blad'] = '<span style="color:red">Nieprawidłowy login lub hasło!</span>';
+    $_SESSION['errors'] = '<span style="color:red">Nieprawidłowy login lub hasło!</span>';
+    $stmt->closeCursor();
     header('Location: index.php');
 }

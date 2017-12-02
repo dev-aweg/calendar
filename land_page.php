@@ -292,9 +292,9 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
                     <td>NIEDZIELA</td>
                 </tr>
 
-<?php foreach ($matrix as $row): ?>
+                <?php foreach ($matrix as $row): ?>
                     <tr class="komorka">
-                    <?php foreach ($row as $cell): ?>
+                        <?php foreach ($row as $cell): ?>
                             <td>
                                 <div class="przycisk">
                                     <button class="cellBtn btn btn-primary" data-toggle="modal" data-target="#exampleModal"
@@ -302,9 +302,9 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
                                             style="background-color: <?php echo $cell['status_color'] ?>"><?php echo $cell['day']; ?></button>
                                 </div>
                             </td>
-    <?php endforeach ?>
+                        <?php endforeach ?>
                     </tr>
-                    <?php endforeach ?>
+                <?php endforeach ?>
             </table>
         </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
@@ -341,16 +341,17 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
                                     <div class="col-sm-3 myeventheader">Status</div>
                                     <div class="col-sm-1"></div>
                                 </div>
-<?php foreach ($my_events as $row => $son): ?>
+                                <?php foreach ($my_events as $row => $son): ?>
                                     <div class="row guttersmall">
                                         <div class="col-sm-5 myeventtable"><?php echo $son['date'] ?></div>
                                         <div class="col-sm-3 myeventtable"><?php echo $son['hour'] ?></div>
                                         <div class="col-sm-3 myeventstatus">
-    <?php if ($son['confirmed'] == 1)
-        echo $checked_icon;
-    else
-        echo $wait_icon
-        ?>
+                                            <?php
+                                            if ($son['confirmed'] == 1)
+                                                echo $checked_icon;
+                                            else
+                                                echo $wait_icon
+                                                ?>
                                         </div>
                                         <div class="col-sm-1"></div>
                                     </div>
