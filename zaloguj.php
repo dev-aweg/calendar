@@ -18,10 +18,7 @@ if ($polaczenie->connect_errno != 0) {
     $haslo = $_POST['password'];
     $login = htmlentities($login, ENT_QUOTES, "UTF-8");
 
-    if ($rezultat = $polaczenie->query(
-        sprintf
-        ("SELECT * FROM uzytkownicy WHERE email='%s'",
-            mysqli_real_escape_string($polaczenie, $login)))) {
+    if ($rezultat = $polaczenie->query(sprintf("SELECT * FROM uzytkownicy WHERE email='%s'", mysqli_real_escape_string($polaczenie, $login)))) {
         $ilu_userow = $rezultat->num_rows;
         if ($ilu_userow > 0) {
             $wiersz = $rezultat->fetch_assoc();
@@ -37,15 +34,15 @@ if ($polaczenie->connect_errno != 0) {
 
                 if ($wiersz['id'] == 20) {
                     header('Location: admin_panel.php');
-                }else header('Location: stronagl.php');
+                } else {
+                    header('Location: land_page.php');
+                }
             }
-
         } else {
 
             $_SESSION['blad'] = '<span style="color:red">Nieprawidłowy login lub hasło!</span>';
             header('Location: index.php');
-
         }
     }
     $polaczenie->close();
-}
+}  

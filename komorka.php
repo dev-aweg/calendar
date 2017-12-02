@@ -30,9 +30,8 @@ foreach (range(12, 16) as $hour) {
 }
 
 if ($rezultat = $polaczenie->query(
-    sprintf
-    ("SELECT * FROM events AS e LEFT JOIN uzytkownicy AS u ON e.user_id = u.id WHERE `date`='%s'",
-        mysqli_real_escape_string($polaczenie, $date)))) {
+        sprintf
+                ("SELECT * FROM events AS e LEFT JOIN uzytkownicy AS u ON e.user_id = u.id WHERE `date`='%s'", mysqli_real_escape_string($polaczenie, $date)))) {
     $events = $rezultat->fetch_all(MYSQLI_ASSOC);
     foreach ($events as $event) {
         if ($event['confirmed'] == 1 && ($event['name'])) {
@@ -47,81 +46,82 @@ if ($rezultat = $polaczenie->query(
             $event['button_status'] = "disabled";
         }
         $matrix[$event['hour']][$event['column']] = $event;
-
     }
 }
-
-
 ?>
-<html>
-<head>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-</head>
+<HTML LANG="PL">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    </head>
 </head>
 <body>
-<div class="row">
-    <div class="col-sm-12">
-        <?php foreach ($matrix as $column => $cells): ?>
-            <div class="row guttersmall">
-                <div class="col-sm-2">
-                    <div class="hours">
-                        <?php echo $column ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <?php foreach ($matrix as $column => $cells): ?>
+                <div class="row guttersmall">
+                    <div class="col-sm-2">
+                        <div class="hours">
+                            <?php echo $column ?>
+                        </div>
                     </div>
+                    <?php foreach ($cells as $event): ?>
+                        <div class="col-sm-5">
+                            <button class="<?php echo $event['button_class'] ?? "switch" ?>" style="color: black"
+                                    data-hour="<?php echo $event['hour'] ?>"
+                                    data-column="<?php echo $event['column'] ?>"
+                                    data-date="<?php echo $date ?>"
+                                    <?php echo $event['button_status'] ?>
+                                    onclick="setColor(this)">
+                                        <?php echo $event['name']; ?>
+                            </button>
+                        </div>
+                    <?php endforeach ?>
+
                 </div>
-                <?php foreach ($cells as $event): ?>
-                    <div class="col-sm-5">
-                        <button class="<?php echo $event['button_class'] ?? "switch"?>" style="color: black"
-                                data-hour="<?php echo $event['hour'] ?>"
-                                data-column="<?php echo $event['column'] ?>"
-                                data-date="<?php echo $date ?>"
-                                <?php echo $event['button_status'] ?>
-                                onclick="setColor(this)">
-                            <?php echo $event['name']; ?>
-                        </button>
-                    </div>
-                <?php endforeach ?>
-
-            </div>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </div>
     </div>
-</div>
-<div id="footer" class="modal-footer">
-    <button id="send" type="button" class="btn float-right">Wyślij prośbę</button>
-</div>
-<div id="koncowy">
-</div>
-<script>
-    function setColor(e) {
-        var status = e.classList.contains('switch');
+    <div id="footer" class="modal-footer">
+        <button id="send" type="button" class="btn float-right">Wyślij prośbę</button>
+    </div>
+    <div id="koncowy">
+    </div>
+    <script>
+        function setColor(e) {
+            var status = e.classList.contains('switch');
 
-        e.classList.add(status ? 'activated' : 'switch');
-        e.classList.remove(status ? 'switch' : 'activated');
-    }
-</script>
-<script>
-    $('#send').click(function () {
-        var ms = [];
-        $('.activated').each(function (index, element) {
-            var $element = $(element);
-            ms.push({
-                date: $element.data("date"),
-                hour: $element.data("hour"),
-                column: $element.data("column")
+            e.classList.add(status ? 'activated' : 'switch');
+            e.classList.remove(status ? 'switch' : 'activated');
+        }
+    </script>
+    <script>
+        $('#send').click(function () {
+            var ms = [];
+            $('.activated').each(function (index, element) {
+                var $element = $(element);
+                ms.push({
+                    date: $element.data("date"),
+                    hour: $element.data("hour"),
+                    column: $element.data("column")
+                });
             });
-        });
-        console.log(ms);
-        $.ajax({
-            type: "POST",
-            url: '/askfor.php',
-            data: {
-                events: ms
-            },
-            success: function () {
-                document.getElementById("modal").innerHTML = "Wysłałeś prośbę, dziękujemy!";
-            }
-        });
-    })
-</script>
+            console.log(ms);
+            $.ajax({
+                type: "POST",
+                url: '/askfor.php',
+                data: {
+                    events: ms
+                },
+                success: function () {
+                    document.getElementById("modal").innerHTML = "Wysłałeś prośbę, dziękujemy!";
+                }
+            });
+        })
+    </script>
 
 </body>
 </html>

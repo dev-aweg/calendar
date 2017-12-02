@@ -1,15 +1,16 @@
 <?php
+
 session_start();
 
 if (isset($_SESSION['zalogowany'])) {
 
-    header('Location: stronagl.php');
+    header('Location: land_page.php');
     exit();
 }
 
 require_once "connect.php";
 
-$polaczenie = @new mysqli($host, $db_user, $db_password, $db_name);
+$polaczenie = new mysqli($host, $db_user, $db_password, $db_name);
 
 if ($polaczenie->connect_errno != 0) {
     echo "Error: " . $polaczenie->connect_errno;
@@ -17,7 +18,7 @@ if ($polaczenie->connect_errno != 0) {
 $new_name = $_POST['new_name'];
 $email = $_POST['email'];
 $password = $_POST['password'];
-$password_confirm = $_POST['password-confirmation'];
+$password_confirm = $_POST['password_confirmation'];
 $resource = $polaczenie->query("SELECT * FROM uzytkownicy WHERE email='$email'");
 $ilu_userow = $resource->num_rows;
 if ($ilu_userow > 0) {
@@ -32,10 +33,9 @@ if ($password !== $password_confirm) {
     exit();
 }
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-function checkEmail(string $email)
-{
-    return (bool)filter_var($email, FILTER_VALIDATE_EMAIL);
 
+function checkEmail(string $email) {
+    return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
 if (checkEmail($email) === false) {
@@ -43,6 +43,14 @@ if (checkEmail($email) === false) {
     header('Location:createaccount.php');
     exit();
 }
-$add = $polaczenie->query("INSERT INTO uzytkownicy SET nazwa='$new_name', email='$email', haslo='$hashed_password'");
+try {
+    $pdo = new PDO('mysql:host=localhost;dbname=wozek;charset=utf8', 'root', 'root');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $stmt = $pdo->prepare("INSERT INTO `uzytkownicy` SET name='$new_name' , email='$email', haslo='$hashed_password'");
+    $stmt->execute();
+} catch (PDOException $e) {
+    echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
+}
 $_SESSION['after_reg'] = "Dziękujemy za rejestrację, zaloguj się";
 header('Location: index.php');

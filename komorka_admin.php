@@ -43,9 +43,8 @@ try {
     echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
 }
 if ($rezultat = $polaczenie->query(
-    sprintf
-    ("SELECT *, e.id AS event_id FROM events AS e LEFT JOIN uzytkownicy AS u ON e.user_id = u.id WHERE `date`='%s'",
-        mysqli_real_escape_string($polaczenie, $date)))) {
+        sprintf
+                ("SELECT *, e.id AS event_id FROM events AS e LEFT JOIN uzytkownicy AS u ON e.user_id = u.id WHERE `date`='%s'", mysqli_real_escape_string($polaczenie, $date)))) {
     $events = $rezultat->fetch_all(MYSQLI_ASSOC);
     foreach ($events as $event) {
         if ($event['confirmed'] == 1 && ($event['name'])) {
@@ -67,150 +66,155 @@ if ($rezultat = $polaczenie->query(
     }
     //print_r($matrix); die();
 }
-
-
 ?>
-<html>
-<head>
-</head>
-<body>
-<div class="row">
-    <div class="col-sm-12">
-        <?php foreach ($matrix as $column => $cells): ?>
-            <div class="row guttersmall">
-                <div class="col-sm-2">
-                    <div class="hours">
-                        <?php echo $column ?>
-                    </div>
-                </div>
-                <?php foreach ($cells as $event): ?>
-                    <div class="col-sm-4">
-                        <div>
-                            <button class="<?php echo $event['button_class'] ?? "switch" ?>"
-                                    data-hour="<?php echo $event['hour'] ?>"
-                                    data-column="<?php echo $event['column'] ?>"
-                                    data-date="<?php echo $date ?>">
-                                <?php if ($event['button_status'] == 'disabled') {
-                                    echo $event['shortname'];
-                                } else {
-                                    $hour = $event['hour'];
-                                    $column = $event['column'];
-                                    echo '<select class="dropdown" data-hour="' . $hour . '" data-column="' . $column . '" data-date="' . $date . '">';
-                                    foreach ($all_users_list as $key) {
-                                        $listname = $key['name'];
-                                        $id_listname = $key['id'];
-                                        echo "<option style ='text-align:center' value='" . "$id_listname" . "'>" . "$listname" . "</option>";
-                                    }
-                                    echo "</select>";
-                                } ?>
-                            </button>
+<!DOCTYPE HTML>
+<HTML LANG="PL">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
+    </head>
+    <body>
+        <div class="row">
+            <div class="col-sm-12">
+                <?php foreach ($matrix as $column => $cells): ?>
+                    <div class="row guttersmall">
+                        <div class="col-sm-2">
+                            <div class="hours">
+                                <?php echo $column ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-1" style="margin-left: -10px">
-                        <button type="submit" class="btn btn-link btn-sm  float-left remove-button button-icon"
-                                data-id="<?php echo $event['event_id'] ?? "" ?>">
-                            <?php echo $event['remove_icon'] ?? "" ?>
-                        </button>
-                        <button type="submit" class="btn btn-link btn-sm  float-left add-button button-icon"
-                                data-id="<?php echo $event['event_id'] ?>">
-                            <?php echo $event['add_icon'] ?? "" ?>
-                        </button>
+                        <?php foreach ($cells as $event): ?>
+                            <div class="col-sm-4">
+                                <div>
+                                    <button class="<?php echo $event['button_class'] ?? "switch" ?>"
+                                            data-hour="<?php echo $event['hour'] ?>"
+                                            data-column="<?php echo $event['column'] ?>"
+                                            data-date="<?php echo $date ?>">
+                                                <?php
+                                                if ($event['button_status'] == 'disabled') {
+                                                    echo $event['shortname'];
+                                                } else {
+                                                    $hour = $event['hour'];
+                                                    $column = $event['column'];
+                                                    echo '<select class="dropdown" data-hour="' . $hour . '" data-column="' . $column . '" data-date="' . $date . '">';
+                                                    foreach ($all_users_list as $key) {
+                                                        $listname = $key['name'];
+                                                        $id_listname = $key['id'];
+                                                        echo "<option style ='text-align:center' value='" . "$id_listname" . "'>" . "$listname" . "</option>";
+                                                    }
+                                                    echo "</select>";
+                                                }
+                                                ?>
+                                    </button>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-1" style="margin-left: -10px">
+                                <button type="submit" class="btn btn-link btn-sm  float-left add-button button-icon"
+                                        data-id="<?php echo $event['event_id'] ?? "" ?>">
+                                            <?php echo $event['add_icon'] ?? "" ?>
+                                </button>
+                                <button type="submit" class="btn btn-link btn-sm  float-left remove-button button-icon"
+                                        data-id="<?php echo $event['event_id'] ?>">
+                                            <?php echo $event['remove_icon'] ?? "" ?>
+                                </button>
+                            </div>
+                        <?php endforeach ?>
+
                     </div>
                 <?php endforeach ?>
-
             </div>
-        <?php endforeach ?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-11">
-        <div id="footer" class="modal-footer">
-            <button id="send" type="button" class="btn float-right"
-                    style="background-color: #e3e5e8;  border-radius: 34px;">ZAPISZ
-            </button>
         </div>
-    </div>
-</div>
-<script>
-    $('#send').click(function () {
-        var ms = [];
-        $('.dropdown').each(function (index, element) {
-            var $element = $(element);
+        <div class="row">
+            <div class="col-sm-11">
+                <div id="footer" class="modal-footer">
+                    <button id="send" type="button" class="btn float-right"
+                            style="background-color: #e3e5e8;  border-radius: 34px;">ZAPISZ
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script>
+            $('#send').click(function () {
+                var ms = [];
+                $('.dropdown').each(function (index, element) {
+                    var $element = $(element);
 
-            ms.push({
-                id: $element.val(),
-                date: $element.data("date"),
-                hour: $element.data("hour"),
-                column: $element.data("column")
+                    ms.push({
+                        id: $element.val(),
+                        date: $element.data("date"),
+                        hour: $element.data("hour"),
+                        column: $element.data("column")
+                    });
+                });
+                console.log(ms);
+                $.ajax({
+                    type: "POST",
+                    url: '/addChosen.php',
+                    data: {
+                        chosen: ms
+                    },
+                    success: function () {
+                        $.ajax({
+                            type: "GET",
+                            url: '/komorka_admin.php',
+                            data: {
+                                date: "<?php echo $date ?>"
+                            },
+                            success: function (response) {
+                                $('#exampleModal .modal-body').html(response);
+                            }
+                        });
+                    }
+                });
+            })
+            $('.remove-button').click(function () {
+
+                var data = $(this).data();
+                console.log(data);
+                $.ajax({
+                    type: "POST",
+                    url: '/remRequest.php',
+                    data: data,
+                    success: function () {
+                        $.ajax({
+                            type: "GET",
+                            url: '/komorka_admin.php',
+                            data: {
+                                date: "<?php echo $date ?>"
+                            },
+                            success: function (response) {
+                                $('#exampleModal .modal-body').html(response);
+                            }
+                        });
+                    }
+                });
             });
-        });
-        console.log(ms);
-        $.ajax({
-            type: "POST",
-            url: '/addChosen.php',
-            data: {
-                chosen: ms
-            },
-            success: function () {
+            $('.add-button').click(function () {
+
+                var data = $(this).data();
+                console.log(data);
                 $.ajax({
-                    type: "GET",
-                    url: '/komorka_admin.php',
-                    data: {
-                        date: "<?php echo $date ?>"
-                    },
-                    success: function (response) {
-                        $('#exampleModal .modal-body').html(response);
+                    type: "POST",
+                    url: '/addRequest.php',
+                    data: data,
+                    success: function () {
+                        $.ajax({
+                            type: "GET",
+                            url: '/komorka_admin.php',
+                            data: {
+                                date: "<?php echo $date ?>"
+                            },
+                            success: function (response) {
+                                $('#exampleModal .modal-body').html(response);
+                            }
+                        });
                     }
                 });
-            }
-        });
-    })
-    $('.remove-button').click(function () {
+            })
+        </script>
 
-        var data = $(this).data();
-        console.log(data);
-        $.ajax({
-            type: "POST",
-            url: '/remRequest.php',
-            data: data,
-            success: function () {
-                $.ajax({
-                    type: "GET",
-                    url: '/komorka_admin.php',
-                    data: {
-                        date: "<?php echo $date ?>"
-                    },
-                    success: function (response) {
-                        $('#exampleModal .modal-body').html(response);
-                    }
-                });
-            }
-        });
-    });
-    $('.add-button').click(function () {
-
-        var data = $(this).data();
-        console.log(data);
-        $.ajax({
-            type: "POST",
-            url: '/addRequest.php',
-            data: data,
-            success: function () {
-                $.ajax({
-                    type: "GET",
-                    url: '/komorka_admin.php',
-                    data: {
-                        date: "<?php echo $date ?>"
-                    },
-                    success: function (response) {
-                        $('#exampleModal .modal-body').html(response);
-                    }
-                });
-            }
-        });
-    })
-</script>
-
-</body>
+    </body>
 </html>
