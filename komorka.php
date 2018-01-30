@@ -99,16 +99,21 @@ if ($rezultat = $polaczenie->query(
         }
     </script>
     <script>
+
         $('#send').click(function () {
             var ms = [];
-            $('.activated').each(function (index, element) {
-                var $element = $(element);
-                ms.push({
-                    date: $element.data("date"),
-                    hour: $element.data("hour"),
-                    column: $element.data("column")
-                });
-            });
+            var i;
+            // var coto = document.getElementsByClassName("activated");
+            Array.from(document.getElementsByClassName("activated")).forEach(
+                    function (element, index, array) {
+                        var $element = $(element);
+                        ms.push({
+                            date: $element.data("date"),
+                            hour: $element.data("hour"),
+                            column: $element.data("column")
+                        });
+                    }
+            );
             console.log(ms);
             $.ajax({
                 type: "POST",
@@ -122,6 +127,5 @@ if ($rezultat = $polaczenie->query(
             });
         })
     </script>
-
 </body>
 </html>
