@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Grafik | Homepage</title>
+        <meta name="description" content="Grafik">
+        <link href='https://fonts.googleapis.com/css?family=Lobster|Open+Sans:400,400italic,300italic,300|Raleway:300,400,600' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/animate.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+         <link rel="stylesheet" type="text/css" href="css/login.css">
+        <style>
+            a i[class^="fa"] { font-size:9em; }
+            a:hover i[class^="fa"] { font-size:10em; }
+        </style>
+    </head>
+
+    <body>
+        <div class="content">
+            <div class="container wow fadeInUp delay-03s">
+                <div class="row" style="height: 500px">
+                   
+
+
+                    <h2 class="subs-title text-center">Witaj!</h2>
+                    <section style="height: 35%">
+                        <div class="container" style="height: 100%">
+                            <div class="row bort text-center" style="height: 100%">
+                                <div class="col-lg-3" style="height: 100%"></div>
+                                <div class="col-lg-2" style="height: 100%">  
+                                    <input type="button" name="answer" value="Show Div" onclick="showDiv()" />
+
+                                    <i class="fa fa-user-circle" style="color: white" onclick="showDiv()"></i>
+                                </div>
+                                <div class="col-lg-2" style="height: 100%">
+                                    <a href="createaccount.php"><i class="fa fa-handshake-o" style="color: white"></i></a>
+                                </div>
+                                <div class="col-lg-2" style="height: 100%">
+                                    <a href="index.php"><i class="fa fa-users" style="color: white"></i></a>                                       
+                                </div>
+                                <div class="col-lg-3" style="height: 100%"></div>                                   
+                            </div>
+                        </div>
+                    </section>
+                    <div class="subcription-info text-center">
+
+                        <div id="loginContainer" class="text-center login-container" style="padding:10px 0">
+	<div class="logo">Zaloguj</div>
+	<div class="login-form-1">
+		<form id="login-form" class="text-left">
+			<div class="login-form-main-message"></div>
+			<div class="main-login-form">
+				<div class="login-group">
+					<div class="form-group">
+						<label for="lg_username" class="sr-only">Username</label>
+						<input type="text" class="form-control" id="lg_username" name="lg_username" placeholder="username">
+					</div>
+					<div class="form-group">
+						<label for="lg_password" class="sr-only">Password</label>
+						<input type="password" class="form-control" id="lg_password" name="lg_password" placeholder="password">
+					</div>
+					<div class="form-group login-group-checkbox">
+						<input type="checkbox" id="lg_remember" name="lg_remember">
+						<label for="lg_remember">remember</label>
+					</div>
+				</div>
+				<button type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+			</div>
+			<div class="etc-login-form">
+				<p>forgot your password? <a href="#">click here</a></p>
+				<p>new user? <a href="#">create new account</a></p>
+			</div>
+		</form>
+	</div>
+	<!-- end:Main Form -->
+</div>
+                    </div>
+                </div>
+            </div>
+            <section id="about" class="section-padding">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 text-center">
+                            <div class="about-title">
+                                <h2>Co tu znajdziesz?</h2>
+                                <p> Tworzymy spersonalizowane kalendarze online  </br>
+                                    dla firm, zorganizowanych społeczności, osób prywatnych</br>
+                                    Kalendarz google okazał się niewystarczającym narzędziem </br>
+                                    dla twojej firmy?</br>
+                                    Nie mogłeś trafić lepiej
+                                </p>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp delay-02s">
+                                <div class="img">
+                                    <i class="fa fa-refresh"></i>
+                                </div>
+                                <h3 class="abt-hd">Jak działamy</h3>
+                                <p>Panel administratora i pozostałych użytkowników rozszerzany według </br> indywidualnych potrzeb. </br> Tu nie znajdziesz szablonów</p>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp delay-04s">
+                                <div class="img">
+                                    <i class="fa fa-eye"></i>
+                                </div>
+                                <h3 class="abt-hd">Nasza wizja</h3>
+                                <p>U nas nie ma miejsca na szablony</br>
+                                    Opowiedz czego potrzebujesz</br>
+                                    my powiemy jak to zrobimy!
+                                </p>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp delay-06s">
+                                <div class="img">
+                                    <i class="fa fa-cogs"></i>
+                                </div>
+                                <h3 class="abt-hd">Narzędzia</h3>
+                                <p>Nie potrzebujesz nic oprócz dostępu do internetu</br>
+                                    Bez ściągania aplikacji</br>
+                                        Intuicyjny interfejs również mobilnie
+                                </p>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp delay-08s">
+                                <div class="img">
+                                    <i class="fa fa-dot-circle-o"></i>
+                                </div>
+                                <h3 class="abt-hd">Realizacje</h3>
+                                <p>Nikt poważny nie wierzy na słowo.</br>
+                                    Sprawdź nasze przykładowe realizacje</br>
+                                    i skorzystaj z testowego dostępu
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div id="contact-info">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="contact-title">
+                                <i class="fa fa-envelope"></i>
+                                <h2>Bądźmy w kontakcie</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor <br>incididunt ut labore et dolore magna aliqua.</p>
+                            </div>
+                        </div>
+                        <div class="contact col-md-6 wow fadeIn delay-08s">
+                            <div class="col-md-10 col-md-offset-1">
+                                <div id="note"></div>
+                                <div id="sendmessage">Twoja wiadomość została wysłana, dziękujemy!</div>
+                                <div id="errormessage"></div>
+                                <form action="" method="post" role="form" class="contactForm">
+                                    <div class="form-group">
+                                        <input type="text" name="name" class="form-control" id="name" placeholder="Imię" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                                        <div class="validation"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" data-rule="email" data-msg="Please enter a valid email" />
+                                        <div class="validation"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Temat" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                                        <div class="validation"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Treść wiadomości"></textarea>
+                                        <div class="validation"></div>
+                                    </div>
+
+                                    <div class="text-center"><button type="submit" class="contact-submit">Wyślij</button></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <div class="row bort">
+
+                    <div class="copyright">
+             
+                        <div class="credits">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+    <script>
+        function showDiv() {
+   document.getElementById('loginContainer').style.display = "block";
+}
+
+    </script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.countdown.min.js"></script>
+        <script src="js/wow.js"></script>
+        <script src="js/custom.js"></script>
+        <script src="contactform/contactform.js"></script>
+
+    </body>
+
+</html>
