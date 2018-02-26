@@ -57,7 +57,8 @@ try {
     $pdo = new PDO('mysql:host=localhost;dbname=wozek;charset=utf8', 'root', 'root');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->query("SELECT `date`, `hour`, `confirmed` FROM events WHERE user_id=$current_id");
+    $stmt = $pdo->query("SELECT `date`, `hour`, `confirmed` FROM events WHERE user_id=$current_id AND MONTH(`date`) = MONTH(NOW())
+AND YEAR(`date`) = YEAR(NOW())");
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $my_events[] = $row;
     }
@@ -355,7 +356,7 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
                                         </div>
                                         <div class="col-sm-1"></div>
                                     </div>
-<?php endforeach ?>
+                                <?php endforeach ?>
                             </div>
                         </div>
 
