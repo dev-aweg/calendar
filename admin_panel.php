@@ -323,9 +323,9 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
                     <td>NIEDZIELA</td>
                 </tr>
 
-<?php foreach ($matrix as $row): ?>
+                <?php foreach ($matrix as $row): ?>
                     <tr class="komorka">
-                    <?php foreach ($row as $cell): ?>
+                        <?php foreach ($row as $cell): ?>
                             <td>
                                 <div class="przycisk">
                                     <button class="cellBtn btn btn-primary" data-toggle="modal" data-target="#exampleModal"
@@ -333,9 +333,9 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
                                             style="background-color: <?php echo $cell['status_color'] ?>"><?php echo $cell['day']; ?></button>
                                 </div>
                             </td>
-    <?php endforeach ?>
+                        <?php endforeach ?>
                     </tr>
-                    <?php endforeach ?>
+                <?php endforeach ?>
             </table>
         </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
@@ -359,17 +359,17 @@ $wait_icon = "<i class=\"fa fa-hourglass-o\"></i>";
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 id="header" class="modal-title centered" style="text-align: center"><?php
-                    if (empty($pending_events)) {
-                        echo "Brak oczekujących eventów";
-                    } else {
-                        echo "Lista wszystkich oczekujacych";
-                    }
-                    ?></h5>
+                            if (empty($pending_events)) {
+                                echo "Brak oczekujących eventów";
+                            } else {
+                                echo "Lista wszystkich oczekujacych";
+                            }
+                            ?></h5>
                         <button type="button" class="close" data-dismiss="modal">
                             <span>&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" id="pending-list" style="visibility: <?php if (empty($pending_events)) echo "hidden" ?? "" ?>">
+                    <div class="modal-body" id="pending-list" style="visibility: <?php echo ($pending_events ? '' : 'hidden'); ?>">
                         <div class="row">
                             <div class="col-sm-12" style="text-align: center" id="list-header-container">
                                 <div class="row guttersmall">
